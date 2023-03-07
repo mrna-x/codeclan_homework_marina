@@ -1,0 +1,124 @@
+---
+title: "weekend_1_books_homework"
+output: html_document
+date: "2023-02-25"
+---
+
+```{r}
+library(tidyverse)
+library(skimr)
+library(RColorBrewer)
+```
+
+
+#What is in the data?
+A comprehensive list of goodreads books.
+ 
+
+```{r}
+
+goodreads_books <- read_csv("data/books.csv") 
+
+goodreads_books %>% 
+  select( title, authors, average_rating, language_code) %>%
+  filter(language_code %in% c("eng", "en-US", "en-GB")) %>% 
+  head(10) %>% 
+  rename(language = language_code) %>% 
+  arrange(desc(average_rating)) %>%
+  ggplot() + labs(
+             title = "Top Rated Books",) + 
+(aes(
+  x = title,
+  y = average_rating)) + 
+  geom_col(colour = "red", fill = "pink") + coord_flip()
+
+  
+##Is there a way for me to amend the title of the books and centre the graph? I guess this would have to be done before the graph was plotted?
+##I tried to resize the text but that didnt work the way I wanted it to. I've spent a while trying to fix it and the answer is probably really simple. 
+
+
+```
+
+
+```{r}
+
+goodreads_books %>% 
+  group_by(authors) %>% 
+  summarize(entries = n ()) %>% 
+   arrange(desc(entries)) %>% 
+   head(10) %>% 
+  ggplot() + aes(
+    x = entries, 
+    y = reorder (authors, entries)) +
+             geom_col(colour = "darkgreen", fill = "seagreen") +
+  labs(title = "Authors with most Goodread entries", y = "Authors", x = "No. of Entries on Goodreads Database")
+
+  
+```
+
+```{r}
+
+goodreads_books %>% 
+  ggplot() +
+  aes(x = (average_rating)) + labs(title = "Average Book Rating x Average Number of Ratings", x = "Average Rating", y = "Average Number of Ratings") +
+  geom_histogram(bins=60, colour = "blue", fill = "skyblue") 
+
+ylim??? to set the y axis ratings because the rating_count goes over 20 million but the y axis only goes to 1500 but then that would skew the graph...I am confused. 
+
+
+
+  
+```
+
+
+```{r}
+
+#Notes from this morning homework review
+library(lubridate)
+#yearyear - month month - dayday standard view of dates in r
+
+d_adams <- books %>%
+  filter(authors == "Douglas Adams") %>%
+  mutate(date = mdy(publication_date))
+
+d_adams %>%
+  arrange(date)
+## date is a character vector not dates
+
+d_adams %>%
+  ggplot() +
+  aes(x = date, y = average_rating) +
+  geom_line(col = "red") +
+  geom_point(col = "red") +
+  labs(
+    x = "Publication Date",
+    y = "Average Rating",
+    title = "Douglas Adams Books",
+    subtitle = "Publication Dates and Average Ratings"
+  )
+```
+
+
+
+```{r}
+
+goodreads_books %>% 
+  mutate(language_code_group = if_else(
+    language_code %in% c("eng", "en-US", "en-GB", "en-CA"),
+    "eng",
+    language_code)
+  ) %>% 
+  select
+
+```
+
+```{r}
+
+books <- goodreads_books %>%
+  mutate(language_code_group = if_else(
+    language_code %in% c("eng", "en-US", "en-GB", "en-CA"),
+    "eng",
+    language_code)
+  )
+```
+

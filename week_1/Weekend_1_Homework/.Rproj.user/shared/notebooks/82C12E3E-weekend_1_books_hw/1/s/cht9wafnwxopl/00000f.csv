@@ -1,0 +1,10 @@
+"0","books <- books %>%
+  mutate(language_code_group = if_else(
+    language_code %in% c(""eng"", ""en-US"", ""en-GB"", ""en-CA""),
+    ""eng"",
+    language_code)
+  )
+"
+"2","Error in mutate(., language_code_group = if_else(language_code %in% c(""eng"",  : 
+  object 'books' not found
+"
